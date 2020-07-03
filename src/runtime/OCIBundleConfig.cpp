@@ -119,8 +119,24 @@ rj::Value OCIBundleConfig::makeMemberProcess() const {
     process.AddMember(  "cwd",
                         rj::Value{configsMerger.getWorkdirInContainer().c_str(), *allocator},
                         *allocator);
-    process.AddMember("capabilities", rj::Value{rj::kObjectType}, *allocator);
-    process.AddMember("noNewPrivileges", rj::Value{true}, *allocator);
+
+    auto capabilities = rj::Value{rj::kObjectType};
+
+    for (auto key : {"bounding", "effective", "inheritable", "permitted", "ambient"}) {
+        auto caps = rj::Value(rj::kArrayType);
+        caps.PushBack("CAP_CHOWN", *allocator);
+        caps.PushBack("CAP_SETUID", *allocator);
+        caps.PushBack("CAP_SETGID", *allocator);
+        caps.PushBack("CAP_FOWNER", *allocator);
+        caps.PushBack("CAP_DAC_OVERRIDE", *allocator);
+
+        auto keyrj = rj::Value(key, *allocator);
+
+        capabilities.AddMember(keyrj, caps, *allocator);
+    }
+
+    process.AddMember("capabilities", capabilities, *allocator);
+    process.AddMember("noNewPrivileges", rj::Value{false}, *allocator);
 
     return process;
 }
