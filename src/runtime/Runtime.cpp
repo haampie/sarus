@@ -39,7 +39,7 @@ Runtime::Runtime(std::shared_ptr<common::Config> config)
     , fdHandler{config}
 {
     auto status = common::readFile("/proc/self/status");
-    config->commandRun.cpusAllowedList = common::parseCpusAllowedList(status);
+    config->commandRun.cpusAllowedList = "0-15"; //common::parseCpusAllowedList(status);
 }
 
 void Runtime::setupOCIBundle() {
