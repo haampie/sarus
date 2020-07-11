@@ -86,14 +86,14 @@ rj::Value OCIBundleConfig::makeMemberProcess() const {
     // user
     {
         auto user = rj::Value{rj::kObjectType};
-        user.AddMember("uid", rj::Value{config->userIdentity.uid}, *allocator);
-        user.AddMember("gid", rj::Value{config->userIdentity.gid}, *allocator);
+        user.AddMember("uid", rj::Value{0}, *allocator);
+        user.AddMember("gid", rj::Value{0}, *allocator);
 
-        auto additionalGids = rj::Value{rj::kArrayType};
-        for(const auto& gid : config->userIdentity.supplementaryGids) {
-            additionalGids.PushBack(rj::Value{gid}, *allocator);
-        }
-        user.AddMember("additionalGids", additionalGids, *allocator);
+        // auto additionalGids = rj::Value{rj::kArrayType};
+        // for(const auto& gid : config->userIdentity.supplementaryGids) {
+        //     additionalGids.PushBack(rj::Value{gid}, *allocator);
+        // }
+        // user.AddMember("additionalGids", additionalGids, *allocator);
 
         process.AddMember("user", user, *allocator);
     }
@@ -289,7 +289,39 @@ rj::Value OCIBundleConfig::makeMemberLinux() const {
         mount.AddMember("type", rj::Value{"mount"}, *allocator);
         namespaces.PushBack(mount, *allocator);
 
+        auto user = rj::Value{rj::kObjectType};
+        user.AddMember("type", rj::Value{"user"}, *allocator);
+        namespaces.PushBack(user, *allocator);
+
+        auto ipc = rj::Value{rj::kObjectType};
+        ipc.AddMember("type", rj::Value{"ipc"}, *allocator);
+        namespaces.PushBack(ipc, *allocator);
+
+        auto uts = rj::Value{rj::kObjectType};
+        uts.AddMember("type", rj::Value{"uts"}, *allocator);
+        namespaces.PushBack(uts, *allocator);
+
         linux.AddMember("namespaces", namespaces, *allocator);
+    }
+    // uidMappings
+    {
+        auto uidmappings = rj::Value{rj::kArrayType};
+        auto item = rj::Value{rj::kObjectType};
+        item.AddMember("hostID", rj::Value{config->userIdentity.uid}, *allocator);
+        item.AddMember("containerID", rj::Value{0}, *allocator);
+        item.AddMember("size", rj::Value{1}, *allocator);
+        uidmappings.PushBack(item, *allocator);
+        linux.AddMember("uidMappings", uidmappings, *allocator);
+    }
+    // gidMappings
+    {
+        auto gidmappings = rj::Value{rj::kArrayType};
+        auto item = rj::Value{rj::kObjectType};
+        item.AddMember("hostID", rj::Value{config->userIdentity.gid}, *allocator);
+        item.AddMember("containerID", rj::Value{0}, *allocator);
+        item.AddMember("size", rj::Value{1}, *allocator);
+        gidmappings.PushBack(item, *allocator);
+        linux.AddMember("gidMappings", gidmappings, *allocator);
     }
     // rootfsPropagation
     linux.AddMember("rootfsPropagation", rj::Value("slave"), *allocator);
