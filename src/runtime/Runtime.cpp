@@ -135,10 +135,10 @@ void Runtime::mountImageIntoRootfs() const {
     auto lowerDir = bundleDir / "overlay/rootfs-lower";
     auto upperDir = bundleDir / "overlay/rootfs-upper";
     auto workDir = bundleDir / "overlay/rootfs-work";
-    common::createFoldersIfNecessary(rootfsDir);
-    common::createFoldersIfNecessary(lowerDir);
+    common::createFoldersIfNecessary(rootfsDir, config->userIdentity.uid, config->userIdentity.gid);
+    common::createFoldersIfNecessary(lowerDir, config->userIdentity.uid, config->userIdentity.gid);
     common::createFoldersIfNecessary(upperDir, config->userIdentity.uid, config->userIdentity.gid);
-    common::createFoldersIfNecessary(workDir);
+    common::createFoldersIfNecessary(workDir, config->userIdentity.uid, config->userIdentity.gid);
 
     loopMountSquashfs(config->getImageFile(), lowerDir);
     mountOverlayfs(lowerDir, upperDir, workDir, rootfsDir);

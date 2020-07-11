@@ -40,10 +40,11 @@ OCIBundleConfig::OCIBundleConfig(std::shared_ptr<const common::Config> config)
 void OCIBundleConfig::generateConfigFile() const {
     utility::logMessage("Generating bundle's config file", common::LogLevel::INFO);
     makeJsonDocument();
-    common::createFileIfNecessary(configFile);
+    common::createFileIfNecessary(configFile, config->userIdentity.uid, config->userIdentity.gid);
     boost::filesystem::permissions(configFile, boost::filesystem::perms::owner_read |
                                                boost::filesystem::perms::owner_write);
     common::writeJSON(*document, configFile);
+    common::writeJSON(*document, boost::filesystem::path{"/home/harmen/Downloads/config.json"});
     utility::logMessage("Successfully generated bundle's config file", common::LogLevel::INFO);
 }
 
