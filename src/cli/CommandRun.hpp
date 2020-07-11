@@ -69,6 +69,26 @@ public:
         message = boost::format("successfully set up container in %.6f seconds") % setupTime.count();
         cli::utility::printLog(message, common::LogLevel::INFO);
 
+        auto config_json = boost::filesystem::path{conf->json["OCIBundleDir"].GetString()} / "config.json";
+
+        auto gid = conf->userIdentity.gid;
+        auto uid = conf->userIdentity.uid;
+
+        if(chown(config_json.c_str(), uid, gid) != 0) {
+            auto errorMessage = boost::format("failed to change ownership of path: %s") % config_json;
+            SARUS_THROW_ERROR(errorMessage.str());
+        }
+
+        if(setresgid(gid, gid, gid) != 0) {
+            auto message = boost::format("Failed to setresgid(%1%, %1%, %1%): %2%") % gid % strerror(errno);
+            SARUS_THROW_ERROR(message.str());
+        }
+
+        if(setresuid(uid, uid, uid) != 0) {
+            auto message = boost::format("Failed to setresuid(%1%, %1%, %1%): %2%") % uid % strerror(errno);
+            SARUS_THROW_ERROR(message.str());
+        }
+
         runtime.executeContainer();
 
         cli::utility::printLog("Successfully executed run command", common::LogLevel::INFO);
