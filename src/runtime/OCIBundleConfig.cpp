@@ -253,6 +253,7 @@ rj::Value OCIBundleConfig::makeMemberMounts() const {
         element.AddMember("source", rj::Value{"/sys"}, *allocator);
 
         auto options = rj::Value{rj::kArrayType};
+        options.PushBack(rj::Value{"rbind"}, *allocator);
         options.PushBack(rj::Value{"nosuid"}, *allocator);
         options.PushBack(rj::Value{"noexec"}, *allocator);
         options.PushBack(rj::Value{"nodev"}, *allocator);
