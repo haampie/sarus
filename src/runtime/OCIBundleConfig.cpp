@@ -322,21 +322,49 @@ rj::Value OCIBundleConfig::makeMemberLinux() const {
     // uidMappings
     {
         auto uidmappings = rj::Value{rj::kArrayType};
-        auto item = rj::Value{rj::kObjectType};
-        item.AddMember("hostID", rj::Value{config->userIdentity.uid}, *allocator);
-        item.AddMember("containerID", rj::Value{0}, *allocator);
-        item.AddMember("size", rj::Value{1}, *allocator);
-        uidmappings.PushBack(item, *allocator);
+
+        // Map current user to root
+        {
+            auto item = rj::Value{rj::kObjectType};
+            item.AddMember("hostID", rj::Value{config->userIdentity.uid}, *allocator);
+            item.AddMember("containerID", rj::Value{0}, *allocator);
+            item.AddMember("size", rj::Value{1}, *allocator);
+            uidmappings.PushBack(item, *allocator);
+        }
+
+        // And get the other mappings from /etc/subgids (just hard-coded for now)
+        {
+            auto item = rj::Value{rj::kObjectType};
+            item.AddMember("hostID", rj::Value{100000}, *allocator);
+            item.AddMember("containerID", rj::Value{1}, *allocator);
+            item.AddMember("size", rj::Value{65536}, *allocator);
+            uidmappings.PushBack(item, *allocator);
+        }
+
         linux.AddMember("uidMappings", uidmappings, *allocator);
     }
     // gidMappings
     {
         auto gidmappings = rj::Value{rj::kArrayType};
-        auto item = rj::Value{rj::kObjectType};
-        item.AddMember("hostID", rj::Value{config->userIdentity.gid}, *allocator);
-        item.AddMember("containerID", rj::Value{0}, *allocator);
-        item.AddMember("size", rj::Value{1}, *allocator);
-        gidmappings.PushBack(item, *allocator);
+
+        // Map current user to root
+        {
+            auto item = rj::Value{rj::kObjectType};
+            item.AddMember("hostID", rj::Value{config->userIdentity.gid}, *allocator);
+            item.AddMember("containerID", rj::Value{0}, *allocator);
+            item.AddMember("size", rj::Value{1}, *allocator);
+            gidmappings.PushBack(item, *allocator);
+        }
+
+        // And get the other mappings from /etc/subgids (just hard-coded for now)
+        {
+            auto item = rj::Value{rj::kObjectType};
+            item.AddMember("hostID", rj::Value{100000}, *allocator);
+            item.AddMember("containerID", rj::Value{1}, *allocator);
+            item.AddMember("size", rj::Value{65536}, *allocator);
+            gidmappings.PushBack(item, *allocator);
+        }
+
         linux.AddMember("gidMappings", gidmappings, *allocator);
     }
     // rootfsPropagation
