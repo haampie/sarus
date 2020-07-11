@@ -44,7 +44,6 @@ void OCIBundleConfig::generateConfigFile() const {
     boost::filesystem::permissions(configFile, boost::filesystem::perms::owner_read |
                                                boost::filesystem::perms::owner_write);
     common::writeJSON(*document, configFile);
-    common::writeJSON(*document, boost::filesystem::path{"/home/harmen/Downloads/config.json"});
     utility::logMessage("Successfully generated bundle's config file", common::LogLevel::INFO);
 }
 
