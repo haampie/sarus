@@ -249,8 +249,8 @@ rj::Value OCIBundleConfig::makeMemberMounts() const {
     {
         auto element = rj::Value{rj::kObjectType};
         element.AddMember("destination", rj::Value{"/sys"}, *allocator);
-        element.AddMember("type", rj::Value{"sysfs"}, *allocator);
-        element.AddMember("source", rj::Value{"sysfs"}, *allocator);
+        element.AddMember("type", rj::Value{"none"}, *allocator);
+        element.AddMember("source", rj::Value{"/sys"}, *allocator);
 
         auto options = rj::Value{rj::kArrayType};
         options.PushBack(rj::Value{"nosuid"}, *allocator);
