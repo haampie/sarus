@@ -160,6 +160,22 @@ rj::Value OCIBundleConfig::makeMemberMounts() const {
         element.AddMember("source", rj::Value{"proc"}, *allocator);
         mounts.PushBack(element, *allocator);
     }
+    // dev
+    {
+        auto element = rj::Value{rj::kObjectType};
+        element.AddMember("destination", rj::Value{"/dev"}, *allocator);
+        element.AddMember("type", rj::Value{"tmpfs"}, *allocator);
+        element.AddMember("source", rj::Value{"tmpfs"}, *allocator);
+
+        auto options = rj::Value{rj::kArrayType};
+        options.PushBack(rj::Value{"nosuid"}, *allocator);
+        options.PushBack(rj::Value{"strictatime"}, *allocator);
+        options.PushBack(rj::Value{"mode=755"}, *allocator);
+        options.PushBack(rj::Value{"size=65536k"}, *allocator);
+        element.AddMember("options", options, *allocator);
+
+        mounts.PushBack(element, *allocator);
+    }
     // dev/pts
     {
         auto element = rj::Value{rj::kObjectType};
