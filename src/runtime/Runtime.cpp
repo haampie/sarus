@@ -71,8 +71,9 @@ void Runtime::executeContainer() const {
     // assemble runc args
     auto runcPath = config->json["runcPath"].GetString();
     auto extraFileDescriptors = std::to_string(fdHandler.getExtraFileDescriptors());
-    auto args = common::CLIArguments{runcPath, "run",
-                                     "--preserve-fds", extraFileDescriptors,
+    auto args = common::CLIArguments{runcPath, 
+                                    "--root", config->json["rootPath"].GetString(),
+                                    "run", "--preserve-fds", extraFileDescriptors,
                                      containerID};
 
     // execute runc
