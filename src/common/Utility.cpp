@@ -313,6 +313,7 @@ void setOwner(const boost::filesystem::path& path, uid_t uid, gid_t gid) {
 
     if(chown(path.c_str(), uid, gid) != 0) {
         auto errorMessage = boost::format("failed to change ownership of path: %s") % path;
+        SARUS_THROW_ERROR(errorMessage.str());
     }
 }
 
