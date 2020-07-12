@@ -133,7 +133,7 @@ rj::Value OCIBundleConfig::makeMemberProcess() const {
     }
 
     process.AddMember("capabilities", capabilities, *allocator);
-    process.AddMember("noNewPrivileges", rj::Value{false}, *allocator);
+    process.AddMember("noNewPrivileges", rj::Value{true}, *allocator);
 
     return process;
 }
