@@ -31,7 +31,6 @@ private:
     void setupMountIsolation() const;
     void setupRamFilesystem() const;
     void mountImageIntoRootfs() const;
-    void setupDevFilesystem() const;
     void copyEtcFilesIntoRootfs() const;
     void mountInitProgramIntoRootfsIfNecessary() const;
     void performCustomMounts() const;

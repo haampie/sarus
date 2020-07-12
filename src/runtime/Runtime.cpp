@@ -48,7 +48,6 @@ void Runtime::setupOCIBundle() {
     setupMountIsolation();
     setupRamFilesystem();
     mountImageIntoRootfs();
-    setupDevFilesystem();
     copyEtcFilesIntoRootfs();
     mountInitProgramIntoRootfsIfNecessary();
     performCustomMounts();
@@ -145,24 +144,6 @@ void Runtime::mountImageIntoRootfs() const {
     mountOverlayfs(lowerDir, upperDir, workDir, rootfsDir);
 
     utility::logMessage("Successfully mounted image into bundle's rootfs", common::LogLevel::INFO);
-}
-
-void Runtime::setupDevFilesystem() const {
-    utility::logMessage("Setting up /dev filesystem", common::LogLevel::INFO);
-
-    const char* ramFilesystemType = config->json["ramFilesystemType"].GetString();
-    common::createFoldersIfNecessary(rootfsDir / "dev");
-    auto flags = MS_NOSUID | MS_STRICTATIME;
-    auto* options = "mode=755,size=65536k";
-    if(mount(NULL, (rootfsDir / "dev").c_str(), ramFilesystemType, flags, options) != 0) {
-        auto message = boost::format("Failed to setup %s filesystem on %s: %s")
-            % ramFilesystemType
-            % (rootfsDir / "dev")
-            % strerror(errno);
-        SARUS_THROW_ERROR(message.str());
-    }
-
-    utility::logMessage("Successfully set up /dev filesystem", common::LogLevel::INFO);
 }
 
 void Runtime::copyEtcFilesIntoRootfs() const {
