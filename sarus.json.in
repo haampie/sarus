@@ -12,12 +12,5 @@
     "initPath": "@INIT_PATH@",
     "runcPath": "@RUNC_PATH@",
     "ramFilesystemType": "tmpfs",
-    "siteMounts": [
-        {
-            "type": "bind",
-            "source": "/home",
-            "destination": "/home",
-            "flags": {}
-        }
-    ]
+    "siteMounts": []
 }
