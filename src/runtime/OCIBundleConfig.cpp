@@ -163,8 +163,8 @@ rj::Value OCIBundleConfig::makeMemberMounts() const {
     {
         auto element = rj::Value{rj::kObjectType};
         element.AddMember("destination", rj::Value{"/dev"}, *allocator);
-        element.AddMember("type", rj::Value{"tmpfs"}, *allocator);
-        element.AddMember("source", rj::Value{"tmpfs"}, *allocator);
+        element.AddMember("type", rj::Value{config->json["ramFilesystemType"].GetString()}, *allocator);
+        element.AddMember("source", rj::Value{config->json["ramFilesystemType"].GetString()}, *allocator);
 
         auto options = rj::Value{rj::kArrayType};
         options.PushBack(rj::Value{"nosuid"}, *allocator);
