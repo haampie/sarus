@@ -163,8 +163,8 @@ rj::Value OCIBundleConfig::makeMemberMounts() const {
     {
         auto element = rj::Value{rj::kObjectType};
         element.AddMember("destination", rj::Value{"/dev"}, *allocator);
-        element.AddMember("type", rj::Value{config->json["ramFilesystemType"].GetString()}, *allocator);
-        element.AddMember("source", rj::Value{config->json["ramFilesystemType"].GetString()}, *allocator);
+        element.AddMember("type", rj::Value{config->json["ramFilesystemType"].GetString(), *allocator}, *allocator);
+        element.AddMember("source", rj::Value{config->json["ramFilesystemType"].GetString(), *allocator}, *allocator);
 
         auto options = rj::Value{rj::kArrayType};
         options.PushBack(rj::Value{"nosuid"}, *allocator);
@@ -257,6 +257,78 @@ rj::Value OCIBundleConfig::makeMemberMounts() const {
         options.PushBack(rj::Value{"noexec"}, *allocator);
         options.PushBack(rj::Value{"nodev"}, *allocator);
         options.PushBack(rj::Value{"ro"}, *allocator);
+        element.AddMember("options", options, *allocator);
+
+        mounts.PushBack(element, *allocator);
+    }
+    // /etc/resolv.conf
+    {
+        auto element = rj::Value{rj::kObjectType};
+        element.AddMember("destination", rj::Value{"/etc/resolv.conf"}, *allocator);
+        element.AddMember("type", rj::Value{"bind"}, *allocator);
+        element.AddMember("source", rj::Value{"/etc/resolv.conf"}, *allocator);
+
+        auto options = rj::Value{rj::kArrayType};
+        options.PushBack(rj::Value{"ro"}, *allocator);
+        options.PushBack(rj::Value{"rbind"}, *allocator);
+        options.PushBack(rj::Value{"rprivate"}, *allocator);
+        options.PushBack(rj::Value{"nosuid"}, *allocator);
+        options.PushBack(rj::Value{"noexec"}, *allocator);
+        options.PushBack(rj::Value{"nodev"}, *allocator);
+        element.AddMember("options", options, *allocator);
+
+        mounts.PushBack(element, *allocator);
+    }
+    // /etc/hosts
+    {
+        auto element = rj::Value{rj::kObjectType};
+        element.AddMember("destination", rj::Value{"/etc/hosts"}, *allocator);
+        element.AddMember("type", rj::Value{"bind"}, *allocator);
+        element.AddMember("source", rj::Value{"/etc/hosts"}, *allocator);
+
+        auto options = rj::Value{rj::kArrayType};
+        options.PushBack(rj::Value{"ro"}, *allocator);
+        options.PushBack(rj::Value{"rbind"}, *allocator);
+        options.PushBack(rj::Value{"rprivate"}, *allocator);
+        options.PushBack(rj::Value{"nosuid"}, *allocator);
+        options.PushBack(rj::Value{"noexec"}, *allocator);
+        options.PushBack(rj::Value{"nodev"}, *allocator);
+        element.AddMember("options", options, *allocator);
+
+        mounts.PushBack(element, *allocator);
+    }
+    // /etc/passwd
+    {
+        auto element = rj::Value{rj::kObjectType};
+        element.AddMember("destination", rj::Value{"/etc/passwd"}, *allocator);
+        element.AddMember("type", rj::Value{"bind"}, *allocator);
+        element.AddMember("source", rj::Value{"/etc/passwd"}, *allocator);
+
+        auto options = rj::Value{rj::kArrayType};
+        options.PushBack(rj::Value{"ro"}, *allocator);
+        options.PushBack(rj::Value{"rbind"}, *allocator);
+        options.PushBack(rj::Value{"rprivate"}, *allocator);
+        options.PushBack(rj::Value{"nosuid"}, *allocator);
+        options.PushBack(rj::Value{"noexec"}, *allocator);
+        options.PushBack(rj::Value{"nodev"}, *allocator);
+        element.AddMember("options", options, *allocator);
+
+        mounts.PushBack(element, *allocator);
+    }
+    // /etc/group
+    {
+        auto element = rj::Value{rj::kObjectType};
+        element.AddMember("destination", rj::Value{"/etc/group"}, *allocator);
+        element.AddMember("type", rj::Value{"bind"}, *allocator);
+        element.AddMember("source", rj::Value{"/etc/group"}, *allocator);
+
+        auto options = rj::Value{rj::kArrayType};
+        options.PushBack(rj::Value{"ro"}, *allocator);
+        options.PushBack(rj::Value{"rbind"}, *allocator);
+        options.PushBack(rj::Value{"rprivate"}, *allocator);
+        options.PushBack(rj::Value{"nosuid"}, *allocator);
+        options.PushBack(rj::Value{"noexec"}, *allocator);
+        options.PushBack(rj::Value{"nodev"}, *allocator);
         element.AddMember("options", options, *allocator);
 
         mounts.PushBack(element, *allocator);

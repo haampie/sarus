@@ -150,24 +150,8 @@ void Runtime::copyEtcFilesIntoRootfs() const {
     utility::logMessage("Copying /etc files into rootfs", common::LogLevel::INFO);
     auto prefixDir = boost::filesystem::path{config->json["prefixDir"].GetString()};
 
-    common::copyFile(   "/etc/hosts",
-                        rootfsDir / "etc/hosts",
-                        config->userIdentity.uid, config->userIdentity.gid);
-
-    common::copyFile(   "/etc/resolv.conf",
-                        rootfsDir / "etc/resolv.conf",
-                        config->userIdentity.uid, config->userIdentity.gid);
-
     common::copyFile(   prefixDir / "etc/container/nsswitch.conf",
                         rootfsDir / "etc/nsswitch.conf",
-                        config->userIdentity.uid, config->userIdentity.gid);
-
-    common::copyFile(   prefixDir / "etc/passwd",
-                        rootfsDir / "etc/passwd",
-                        config->userIdentity.uid, config->userIdentity.gid);
-
-    common::copyFile(   prefixDir / "etc/group",
-                        rootfsDir / "etc/group",
                         config->userIdentity.uid, config->userIdentity.gid);
 
     utility::logMessage("Successfully copied /etc files into rootfs", common::LogLevel::INFO);
