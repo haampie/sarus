@@ -363,7 +363,7 @@ rj::Value OCIBundleConfig::makeMemberLinux() const {
 
         cpu.AddMember("cpus", cpuAffinity, *allocator);
         resources.AddMember("cpu", cpu, *allocator);
-        // linux.AddMember("resources", resources, *allocator);
+        linux.AddMember("resources", resources, *allocator);
     }
     // namespaces
     {
