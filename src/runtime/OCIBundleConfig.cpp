@@ -361,9 +361,10 @@ rj::Value OCIBundleConfig::makeMemberLinux() const {
         auto cpus = boost::join(config->commandRun.cpuAffinity |intToString, ",");
         auto cpuAffinity = rj::Value{cpus.c_str(), *allocator};
 
-        cpu.AddMember("cpus", cpuAffinity, *allocator);
-        resources.AddMember("cpu", cpu, *allocator);
-        linux.AddMember("resources", resources, *allocator);
+        // temporarily disable cgroups, requires a certain kernel config.
+        // cpu.AddMember("cpus", cpuAffinity, *allocator);
+        // resources.AddMember("cpu", cpu, *allocator);
+        // linux.AddMember("resources", resources, *allocator);
     }
     // namespaces
     {
